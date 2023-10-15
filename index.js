@@ -28,6 +28,22 @@ app.post("/work", (req, res) => {
   res.redirect("/work");
 });
 
+app.post("/delete-task", function(req, res) {
+  let index = req.body.index;
+  let task = req.body.task;
+  tasks.splice(index, 1); // Remove task from tasks array
+  console.log("Deleted task:", task);
+  res.sendStatus(200); // Send status code 200 (OK)
+});
+
+app.post("/delete-work-task", function(req, res) {
+  let index = req.body.index;
+  let workTask = req.body.task;
+  workTasks.splice(index, 1); // Remove task from workTasks array
+  console.log("Deleted task:", workTask);
+  res.sendStatus(200); // Send status code 200 (OK)
+});
+
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });

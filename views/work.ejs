@@ -9,33 +9,62 @@
 <body>
     <%- include("partials/header.ejs") %>
     <div class="container">
-        <ul class="list-group">
-          <% for (let i = 0; i < workTasks.length; i++) { %>
-            <li class="list-group-item">
+      <h1>Work Task List</h1>
+      <br/>
+      <ul class="list-group">
+        <% for (let i = 0; i < workTasks.length; i++) { %>
+          <li class="list-group-item row d-flex align-items-center">
+            <div class="col-md-10">
               <% let checkboxID = "checkbox" + i %>
               <input class="form-check-input me-1" type="checkbox" value="" id="<%= checkboxID %>" onchange="toggleStrikethrough(<%= i %>)">
               <span id="task<%= i %>"><%= workTasks[i] %></span>
-            </li>
-          <% } %>
-        </ul>
-        <br/>
-        <form method="POST" class="form-parent">
-          <div class="form-group">
-            <input type="text" class="form-control w-100" id="task" name="task" placeholder="Enter a new task.">
-          </div>
-          <button type="submit" class="btn btn-primary">Add Task</button>
-        </form>
-      </div>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" onclick="deleteFromList(<%= i %>)" class="btn btn-danger" id="delete<%= i %>" disabled>Delete</button>
+            </div>
+          </li>
+        <% } %>
+      </ul>
+      <br/>
+      <form method="POST" class="form-parent row">
+        <div class="form-group col-md-8">
+          <input type="text" class="form-control w-100" id="task" name="task" placeholder="Enter a new task.">
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-primary w-100">Add Task</button>
+        </div>
+      </form>
+    </div>
     <%- include("partials/footer.ejs") %>
+
+
     <script>
-        function toggleStrikethrough(index) {
-          const task = document.getElementById("task" + index);
-          if (task.classList.contains("strikethrough")) {
-            task.classList.remove("strikethrough");
-          } else {
-            task.classList.add("strikethrough");
-          }
+      function toggleStrikethrough(index) {
+        let checkbox = document.getElementById("checkbox" + index);
+        let task = document.getElementById("task" + index);
+        let deleteButton = document.getElementById("delete" + index);
+        if (checkbox.checked) {
+          task.style.textDecoration = "line-through";
+          deleteButton.disabled = false;
+        } else {
+          task.style.textDecoration = "none";
+          deleteButton.disabled = true;
         }
-      </script>
-</body>
+      }
+      
+      function deleteFromList(index) {
+        let taskElement = document.getElementById("task" + index);
+        let listItemElement = taskElement.closest("li");
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/delete-work-task");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            listItemElement.remove(); // Remove task from UI
+          }
+        };
+        xhr.send(JSON.stringify({ index: index }));
+      }
+    </script>
+  </body>
 </html>
