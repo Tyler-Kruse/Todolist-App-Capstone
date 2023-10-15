@@ -9,33 +9,42 @@
 <body>
     <%- include("partials/header.ejs") %>
     <div class="container">
-        <ul class="list-group">
-          <% for (let i = 0; i < tasks.length; i++) { %>
-            <li class="list-group-item">
-              <% let checkboxID = "checkbox" + i %>
-              <input class="form-check-input me-1" type="checkbox" value="" id="<%= checkboxID %>" onchange="toggleStrikethrough(<%= i %>)">
-              <span id="task<%= i %>"><%= tasks[i] %></span>
-            </li>
-          <% } %>
-        </ul>
-        <br/>
-        <form method="POST" class="form-parent">
-          <div class="form-group">
-            <input type="text" class="form-control w-100" id="task" name="task" placeholder="Enter a new task.">
-          </div>
-          <button type="submit" class="btn btn-primary">Add Task</button>
-        </form>
-      </div>
+  <ul class="list-group">
+    <% for (let i = 0; i < tasks.length; i++) { %>
+      <li class="list-group-item row d-flex align-items-center">
+        <div class="col-md-10">
+          <% let checkboxID = "checkbox" + i %>
+          <input class="form-check-input me-1" type="checkbox" value="" id="<%= checkboxID %>" onchange="toggleStrikethrough(<%= i %>)">
+          <span id="task<%= i %>"><%= tasks[i] %></span>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-danger" id="delete<%= i %>" disabled>Delete</button>
+        </div>
+      </li>
+    <% } %>
+  </ul>
+  <br/>
+  <form method="POST" class="form-parent">
+    <div class="form-group">
+      <input type="text" class="form-control w-100" id="task" name="task" placeholder="Enter a new task.">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Task</button>
+  </form>
+</div>
     <%- include("partials/footer.ejs") %>
     <script>
-        function toggleStrikethrough(index) {
-          const task = document.getElementById("task" + index);
-          if (task.classList.contains("strikethrough")) {
-            task.classList.remove("strikethrough");
-          } else {
-            task.classList.add("strikethrough");
-          }
-        }
-      </script>
+  function toggleStrikethrough(index) {
+    let checkbox = document.getElementById("checkbox" + index);
+    let task = document.getElementById("task" + index);
+    let deleteButton = document.getElementById("delete" + index);
+    if (checkbox.checked) {
+      task.style.textDecoration = "line-through";
+      deleteButton.disabled = false;
+    } else {
+      task.style.textDecoration = "none";
+      deleteButton.disabled = true;
+    }
+  }
+</script>
 </body>
 </html>
