@@ -1,0 +1,20 @@
+.strikethrough {
+    text-decoration: line-through;
+  }
+
+.list-group{
+    width: 50%;
+    margin: 0 auto;
+}
+
+.form-parent{
+    width: 50%;
+    margin: 0 auto;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+

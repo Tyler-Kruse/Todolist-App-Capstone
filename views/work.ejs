@@ -1,2 +1,41 @@
-<%- include("partials/header.ejs") %>
-<h1>This is work</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/public/styles.css">
+    <title>Main List</title>
+</head>
+<body>
+    <%- include("partials/header.ejs") %>
+    <div class="container">
+        <ul class="list-group">
+          <% for (let i = 0; i < workTasks.length; i++) { %>
+            <li class="list-group-item">
+              <% let checkboxID = "checkbox" + i %>
+              <input class="form-check-input me-1" type="checkbox" value="" id="<%= checkboxID %>" onchange="toggleStrikethrough(<%= i %>)">
+              <span id="task<%= i %>"><%= workTasks[i] %></span>
+            </li>
+          <% } %>
+        </ul>
+        <br/>
+        <form method="POST" class="form-parent">
+          <div class="form-group">
+            <input type="text" class="form-control w-100" id="task" name="task" placeholder="Enter a new task.">
+          </div>
+          <button type="submit" class="btn btn-primary">Add Task</button>
+        </form>
+      </div>
+    <%- include("partials/footer.ejs") %>
+    <script>
+        function toggleStrikethrough(index) {
+          const task = document.getElementById("task" + index);
+          if (task.classList.contains("strikethrough")) {
+            task.classList.remove("strikethrough");
+          } else {
+            task.classList.add("strikethrough");
+          }
+        }
+      </script>
+</body>
+</html>
